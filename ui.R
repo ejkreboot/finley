@@ -29,15 +29,15 @@ ui <- fluidPage(theme = shinytheme("cyborg"),
     ),
     tabPanel("Transactions",
       fluidRow(
-        column(12,
+        column(8,
           div(
             tags$table(class="transactions",
-              tags$thead(id="transactions_table",
+            tags$thead(id="transactions_table",
                 tags$tr(
-                  tags$td("Date"),
+                  tags$td(class="col1", "Date"),
                   tags$td("Payee"),
-                  tags$td("Amount"),
-                  tags$td("Category")
+                  tags$td(class="money", "Amount"),
+                  tags$td(class="category_header", "Category")
                 )
               ) 
             )

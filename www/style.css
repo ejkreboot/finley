@@ -71,3 +71,32 @@ h4 {
 .select > * {
   background-color: DodgerBlue;
 }
+
+.col1 {
+}
+
+
+.transactions tr :nth-child(2) {
+    width: 300px;
+    overflow: hidden;
+    display: inline-block;
+    white-space: nowrap;  
+}
+
+.transactions tr :nth-child(3) {
+    width: 100px;
+    overflow: hidden;
+    display: inline-block;
+    white-space: nowrap;  
+}
+
+.transactions tr :nth-child(4) {
+    width: 200px;
+    overflow: hidden;
+    display: inline-block;
+    white-space: nowrap;  
+}
+
+.category_header {
+  margin-left: 20px;
+}
