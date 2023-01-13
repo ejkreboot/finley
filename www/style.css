@@ -1,0 +1,47 @@
+
+h4 {
+  color: white;
+}
+
+#transactions_table td {
+  padding-right: 10px;
+}
+
+.masthead {
+  font-weight: 900;
+  font-size: 30px;
+  margin-bottom: 0px;
+  margin-left: 10px;
+}
+
+.submasthead {
+  color: gray;
+  margin-bottom: 20px;
+  margin-left: 10px;
+}
+
+.nav-tabs a {
+  height: 32px;
+  padding-top: 0px;
+  margin-top: 0px;
+}
+
+.nav-tabs li a {
+  padding-top: 7px;
+}
+
+.tab-content {
+  padding-top: 10px;
+}
+
+.transactions .form-group {
+  margin-bottom: 0px;
+}
+
+.transactions td {
+  padding-bottom: 5px;
+}
+
+.money {
+  text-align: right;
+}
