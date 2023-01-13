@@ -1,3 +1,6 @@
+body {
+  font-family: "Avenir Light";
+}
 
 h4 {
   color: white;
@@ -35,7 +38,26 @@ h4 {
 }
 
 .transactions .form-group {
-  margin-bottom: 0px;
+  margin-bottom: 2px;
+}
+
+.transactions .form-group div > select{
+  background-color: #5897d1;
+  color: white;
+  border-radius: 3px;
+  border-width: 0px;
+  font-family: Avenir;
+  font-weight: 500;
+  margin: 0px;
+  padding: 6px 5px 5px 10px;
+  height: 30px;
+  width: 170px;
+}
+
+.transactions .form-group div{
+  background-color: black;
+  width: 170px;
+  margin-left: 20px;
 }
 
 .transactions td {
@@ -44,4 +66,8 @@ h4 {
 
 .money {
   text-align: right;
+}
+
+.select > * {
+  background-color: DodgerBlue;
 }
