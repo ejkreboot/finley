@@ -29,7 +29,7 @@ ui <- fluidPage(theme = shinytheme("cyborg"),
     ),
     tabPanel("Transactions",
       fluidRow(
-        column(8,
+        column(12,
           div(
             tags$table(class="transactions",
             tags$thead(id="transactions_table",
