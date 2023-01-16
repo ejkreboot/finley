@@ -5,11 +5,13 @@ library(ggplot2)
 library(ggfx)
 library(ggdark)
 library(DT)
+library(rnab) # remotes::install_github("https://github.com/ejkreboot/rnab")
 
 library(dotenv)
 load_dot_env(file = ".env")
+
 BUDGET <- as.numeric(Sys.getenv("YNAB_BUDGET"))
-GOAL <- 7000
+GOAL <- as.numeric(Sys.getenv("YNAB_GOAL"))
 REFRESH <- 1000 * 60 * 60 * 2 # 2 hours
 options(scipen = 999)
 
@@ -46,9 +48,8 @@ server <- function(input, output, session) {
 
     output$accountsPlot <- renderPlot({
       invalidateLater(REFRESH, session)
-      dat <- get_account_info(BUDGET);
-      dat$balance <- dat$balance/1000
-      dat <- rbind(c("", "NET", "", "", "", sum(dat$balance), rep("", 6)), dat)
+      dat <- get_account_info(BUDGET)
+      dat <- rbind(c("", "NET", "", "", "", "", sum(dat$balance), rep("", 4)), dat)
       dat$balance <- as.numeric(dat$balance) # ??
       
       ggplot(dat, aes(x=name, y=balance)) +
@@ -69,7 +70,7 @@ server <- function(input, output, session) {
       if(length(ix) > 0) {
         dat <- dat[-ix,]
       }
-      total <- sum(dat$amount)/1000
+      total <- sum(dat$amount)
       dat <- data.frame(class = c("Spent", "Budgeted"), amount=c(total, GOAL))
       ggplot(dat, aes(x="", y=amount, fill=class)) +
         with_blur(geom_bar(stat="identity", width=0.35), sigma = 20) + 
@@ -86,8 +87,8 @@ server <- function(input, output, session) {
       
       dat <- get_categories(BUDGET)
       dat <- dat[ , c(3,7,8,12)]
-      dat[ , 2] <- format(as.numeric(dat[ , 2]) / 1000, nsmall=2)
-      dat[ , 3] <- format(as.numeric(dat[ , 3]) / 1000, nsmall=2)
+      dat[ , 2] <- format(as.numeric(dat[ , 2]), nsmall=2)
+      dat[ , 3] <- format(as.numeric(dat[ , 3]), nsmall=2)
       dat
     }, options = list(
       columnDefs = list(list(className = "dt-center", targets = 2:4)),

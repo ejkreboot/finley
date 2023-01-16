@@ -5,7 +5,7 @@ transactionUI <- function(id, tr,
   tags$tr(
     tags$td(class="col1", gsub("^.*?-", "", tr$date)),
     tags$td(tr$payee_name),
-    tags$td(class="money", paste0("$ ", format(-tr$amount/1000, nsmall=2))),
+    tags$td(class="money", paste0("$ ", format(-tr$amount, nsmall=2))),
     tags$td(
       selectInput(ns("category"), selectize = FALSE, 
              label = NULL,
@@ -29,12 +29,12 @@ transactionServer <- function(id, budget, transaction, categories) {
           }
           id <-  categories %>% 
                   filter(name == input$category) %>%    
-                  select("id") %>% 
-                  flatten_chr()
+                  select("id")
 
           tr$category_id = id
           tr$approved <- TRUE
-          tr <- tr %>% dplyr::select(-category_name, -flag_color)
+          tr$amount <- tr$amount * 1000
+          tr <- tr %>% dplyr::select(-category_name, -flag_color, -subtransactions)
           res <- put_transaction(budget, tr)
           if(!res) {
             warning("Failed to update transaction category.")
