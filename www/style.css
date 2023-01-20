@@ -72,10 +72,6 @@ h4 {
   background-color: DodgerBlue;
 }
 
-.col1 {
-}
-
-
 .transactions tr :nth-child(2) {
     width: 300px;
     overflow: hidden;
@@ -95,6 +91,13 @@ h4 {
     overflow: hidden;
     display: inline-block;
     white-space: nowrap;  
+}
+
+.approve_transaction {
+  height: 30px;
+  padding: 0px 10px 0px 10px;
+  margin: -10px 0px 0px 0px;
+  font-size: 12px;
 }
 
 .category_header {

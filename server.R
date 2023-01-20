@@ -47,7 +47,7 @@ server <- function(input, output, session) {
     }
 
     output$accountsPlot <- renderPlot({
-      invalidateLater(REFRESH, session)
+      # invalidateLater(REFRESH, session)
       dat <- get_account_info(BUDGET)
       dat <- rbind(c("", "NET", "", "", "", "", sum(dat$balance), rep("", 4)), dat)
       dat$balance <- as.numeric(dat$balance) # ??
