@@ -37,7 +37,8 @@ ui <- fluidPage(theme = shinytheme("cyborg"),
                   tags$td(class="col1", "Date"),
                   tags$td("Payee"),
                   tags$td(class="money", "Amount"),
-                  tags$td(class="category_header", "Category")
+                  tags$td(class="category_header", "Category"),
+                  tags$td(class="category_header", "Approve")
                 )
               ) 
             )

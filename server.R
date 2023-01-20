@@ -89,6 +89,8 @@ server <- function(input, output, session) {
       dat <- dat[ , c(3,7,8,12)]
       dat[ , 2] <- format(as.numeric(dat[ , 2]), nsmall=2)
       dat[ , 3] <- format(as.numeric(dat[ , 3]), nsmall=2)
+      dat[ , 4] <- format(as.numeric(dat[ , 4]), nsmall=2)
+      colnames(dat)[4] <- "goal"
       dat
     }, options = list(
       columnDefs = list(list(className = "dt-center", targets = 2:4)),
