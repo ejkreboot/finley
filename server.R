@@ -23,6 +23,7 @@ finley_theme <-
         # axis.text.x = element_blank())
         axis.text.x = element_text(vjust = 0.5, hjust=0.5))
 
+
 server <- function(input, output, session) {
   
     trans <- get_current_transactions(BUDGET)
@@ -33,7 +34,6 @@ server <- function(input, output, session) {
       trans <- trans[-ix,]
     }
     ix <- which(trans$approved == FALSE)
-    
     ts <- NULL
     if(length(ix) > 0) {
       trans <- trans[ix,]
@@ -48,8 +48,7 @@ server <- function(input, output, session) {
 
     observeEvent(input$import, {
       if(input$import > 0) {
-        #new_count = update_transactions(BUDGET);
-        new_count = 5;
+        new_count = update_transactions(BUDGET);
         output$import_message <- renderUI({
           paste(new_count, "transaction(s) imported.")
         })
@@ -81,7 +80,7 @@ server <- function(input, output, session) {
         dat <- dat[-ix,]
       }
       total <- sum(-dat$amount)
-      dat <- data.frame(class = c("Spent", "Budgeted"), amount=c(total, GOAL))
+      dat <- data.frame(class = c("Spent", "Budgeted"), amount=c(total, GOAL-total))
       ggplot(dat, aes(x="", y=amount, fill=class)) +
         with_blur(geom_bar(stat="identity", width=0.35), sigma = 20) + 
         geom_bar(stat="identity", width=0.3) +
@@ -93,22 +92,28 @@ server <- function(input, output, session) {
     })
     
     output$categoriesTable <- renderDataTable({
-      invalidateLater(REFRESH, session)
+      # invalidateLater(REFRESH, session)
       dat <- get_categories(BUDGET)
       dat <- dat[ , c(3,7,8,12)]
-      dat[ , 2] <- format(as.numeric(dat[ , 2]), nsmall=2)
-      dat[ , 3] <- format(as.numeric(dat[ , 3]), nsmall=2)
-      dat[ , 4] <- format(as.numeric(dat[ , 4]), nsmall=2)
-      dat[ , 5] <- as.numeric(dat[,3]) > as.numeric(dat[,4])
       colnames(dat)[4] <- "goal"
-      colnames(dat)[5] <- "spent"
-      dat
-    }, options = list(
-      columnDefs = list(list(className = "dt-center", targets = 2:4),
-                        list(targets = 5, visible = FALSE)),
-      paging = TRUE,
-      searching = FALSE,
-      pageLength = 20,
-      rownames = FALSE
-    ))
+      dat$net <- dat$goal + dat$activity
+      
+      d <- DT::datatable(dat, 
+                         rownames = FALSE,
+                         options = list( 
+                           columnDefs = list(
+                             list(targets = c(1:4), className = "dt-center"),
+                             list(targets = c("net"), visible = FALSE)
+                           ),
+                           paging = TRUE,
+                           searching = FALSE,
+                           pageLength = 20
+                         )
+      )
+      
+      d %>% formatStyle(
+        'activity', 'net',
+        color = styleInterval(-0.01, c('#db3218', '#5cdb18'))
+      ) %>% formatCurrency(columns = 2:5)
+    })
 }

@@ -2,7 +2,7 @@ transactionUI <- function(id, tr,
                           choices) {
   ns <- NS(id)
 
-  tags$tr(
+  tags$tr(class = "transaction",
     tags$td(class="col1", gsub("^.*?-", "", tr$date)),
     tags$td(tr$payee_name),
     tags$td(class="money", paste0("$ ", format(-tr$amount, nsmall=2))),
