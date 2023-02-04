@@ -46,6 +46,16 @@ server <- function(input, output, session) {
       }
     }
 
+    observeEvent(input$import, {
+      if(input$import > 0) {
+        #new_count = update_transactions(BUDGET);
+        new_count = 5;
+        output$import_message <- renderUI({
+          paste(new_count, "transaction(s) imported.")
+        })
+      }
+    })
+    
     output$accountsPlot <- renderPlot({
       # invalidateLater(REFRESH, session)
       dat <- get_account_info(BUDGET)
@@ -70,7 +80,7 @@ server <- function(input, output, session) {
       if(length(ix) > 0) {
         dat <- dat[-ix,]
       }
-      total <- sum(dat$amount)
+      total <- sum(-dat$amount)
       dat <- data.frame(class = c("Spent", "Budgeted"), amount=c(total, GOAL))
       ggplot(dat, aes(x="", y=amount, fill=class)) +
         with_blur(geom_bar(stat="identity", width=0.35), sigma = 20) + 
@@ -84,18 +94,21 @@ server <- function(input, output, session) {
     
     output$categoriesTable <- renderDataTable({
       invalidateLater(REFRESH, session)
-      
       dat <- get_categories(BUDGET)
       dat <- dat[ , c(3,7,8,12)]
       dat[ , 2] <- format(as.numeric(dat[ , 2]), nsmall=2)
       dat[ , 3] <- format(as.numeric(dat[ , 3]), nsmall=2)
       dat[ , 4] <- format(as.numeric(dat[ , 4]), nsmall=2)
+      dat[ , 5] <- as.numeric(dat[,3]) > as.numeric(dat[,4])
       colnames(dat)[4] <- "goal"
+      colnames(dat)[5] <- "spent"
       dat
     }, options = list(
-      columnDefs = list(list(className = "dt-center", targets = 2:4)),
+      columnDefs = list(list(className = "dt-center", targets = 2:4),
+                        list(targets = 5, visible = FALSE)),
       paging = TRUE,
       searching = FALSE,
-      pageLength = 20
+      pageLength = 20,
+      rownames = FALSE
     ))
 }

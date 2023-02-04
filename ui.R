@@ -44,6 +44,12 @@ ui <- fluidPage(theme = shinytheme("cyborg"),
             )
           )
         )
+      ),
+      fluidRow(
+        column(12, 
+               actionButton("import", "Import"),
+               htmlOutput("import_message")
+        )
       )
     )
   )
