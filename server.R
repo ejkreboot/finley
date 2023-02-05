@@ -96,7 +96,7 @@ server <- function(input, output, session) {
       dat <- get_categories(BUDGET)
       dat <- dat[ , c(3,7,8,12)]
       colnames(dat)[4] <- "goal"
-      dat$net <- dat$goal + dat$activity
+      dat$net <- (dat$goal + dat$activity) / dat$goal
       
       d <- DT::datatable(dat, 
                          rownames = FALSE,
@@ -113,7 +113,7 @@ server <- function(input, output, session) {
       
       d %>% formatStyle(
         'activity', 'net',
-        color = styleInterval(-0.01, c('#db3218', '#5cdb18'))
+        color = styleInterval(c(-0.01, 0.1), c("#f75036", "#f7ba36", "dodgerblue"))
       ) %>% formatCurrency(columns = 2:5)
     })
 }
