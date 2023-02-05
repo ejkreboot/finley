@@ -30,7 +30,8 @@ transactionServer <- function(id, budget, transaction, categories) {
           id <-  categories %>% 
             filter(name == input$category) %>%    
             select("id")
-          tr$category_id = id
+          tr$category_id = id[1,1]
+          tr$memo = "updated via Finley app."
           tr$approved <- TRUE
           tr$amount <- tr$amount * 1000
           tr <- tr %>% dplyr::select(-category_name, -flag_color, -subtransactions)
