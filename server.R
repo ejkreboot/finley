@@ -20,12 +20,10 @@ finley_theme <-
   theme(axis.title = element_text(face="bold"), 
         plot.title = element_text(face="bold", size=12),
         panel.grid = element_line(color = "dodgerblue", size=0.1),
-        # axis.text.x = element_blank())
         axis.text.x = element_text(vjust = 0.5, hjust=0.5))
 
 
 server <- function(input, output, session) {
-  
     trans <- get_current_transactions(BUDGET)
     cats <- get_categories(BUDGET)
     options = c(cats$name, "Uncategorized")
@@ -56,7 +54,7 @@ server <- function(input, output, session) {
     })
     
     output$accountsPlot <- renderPlot({
-      # invalidateLater(REFRESH, session)
+      invalidateLater(REFRESH, session)
       dat <- get_account_info(BUDGET)
       dat <- rbind(c("", "NET", "", "", "", "", sum(dat$balance), rep("", 4)), dat)
       dat$balance <- as.numeric(dat$balance) # ??

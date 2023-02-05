@@ -2,7 +2,6 @@ library(shiny)
 library(shinythemes)
 library(DT)
 
-# Define UI for application that draws a histogram
 ui <- fluidPage(theme = shinytheme("cyborg"),
   tags$head(
     tags$link(rel = "stylesheet", type = "text/css", href = "style.css")
