@@ -27,7 +27,9 @@ server <- function(input, output, session) {
     trans <- get_current_transactions(BUDGET)
     cats <- get_categories(BUDGET)
     options = c(cats$name, "Uncategorized")
-    ix <- which(trans$category_name == "Inflow: Ready to Assign")
+    ix <- which(trans$category_name %in% c("Credit Card Payments", 
+                                           "Internal Master Category", 
+                                           "Inflow: Ready to Assign"))
     if(length(ix) > 0) {
       trans <- trans[-ix,]
     }
@@ -90,11 +92,17 @@ server <- function(input, output, session) {
     })
     
     output$categoriesTable <- renderDataTable({
-      # invalidateLater(REFRESH, session)
+      invalidateLater(REFRESH, session)
       dat <- get_categories(BUDGET)
-      dat <- dat[ , c(3,7,8,12)]
-      colnames(dat)[4] <- "goal"
-      dat$net <- (dat$goal + dat$activity) / dat$goal
+      ix <- which(dat$category_name %in% c("Credit Card Payments", 
+                                             "Internal Master Category", 
+                                             "Inflow: Ready to Assign"))
+      if(length(ix) > 0) {
+        dat <- dat[-ix,]
+      }
+      dat <- dat[ , c(3,7,8,15)]
+      colnames(dat) <- c("Category", "Allocated", "Spent", "Budget")
+      dat$net <- (dat$Budget + dat$Spent) / dat$Budget
       
       d <- DT::datatable(dat, 
                          rownames = FALSE,
@@ -110,7 +118,7 @@ server <- function(input, output, session) {
       )
       
       d %>% formatStyle(
-        'activity', 'net',
+        'Spent', 'net',
         color = styleInterval(c(-0.01, 0.1), c("#f75036", "#f7ba36", "dodgerblue"))
       ) %>% formatCurrency(columns = 2:5)
     })
