@@ -79,7 +79,13 @@ server <- function(input, output, session) {
       if(length(ix) > 0) {
         dat <- dat[-ix,]
       }
-      total <- sum(-dat$amount)
+      total <- 
+        tryCatch(
+          sum(-dat$amount),
+          error = function(e){
+            return(0)
+          }
+        )
       dat <- data.frame(class = c("Spent", "Budgeted"), amount=c(total, GOAL-total))
       ggplot(dat, aes(x="", y=amount, fill=class)) +
         with_blur(geom_bar(stat="identity", width=0.35), sigma = 20) + 
